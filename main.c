@@ -175,6 +175,26 @@ void drawAll(struct positionData* head, struct positionData* body, int bodyLengt
   drawPositionData(head, headChar); //draw the box as "0"
 }
 
+void addBodySegment(struct positionData** body, int* bodyLength) {
+  struct positionData* newBody;
+  newBody = (struct positionData*)malloc(sizeof(struct positionData) * (*bodyLength + 1));
+  for(int i = 0; i < *bodyLength; i++) {
+    newBody[i].x = (*body)[i].x;
+    newBody[i].y = (*body)[i].y;
+  }
+  newBody[*bodyLength].x = (*body)[*bodyLength - 1].x;
+  newBody[*bodyLength].y = (*body)[*bodyLength - 1].y;
+  free(*body);
+  *body = newBody;
+  (*bodyLength)++;
+  return;
+}
+
+bool getColliding(struct positionData a, struct positionData b) {
+  movePositionData(&a, -b.x, -b.y);
+  return a.x == 0 && a.y == 0;
+}
+
 int main() {
   initscr(); //Initiate screen
 
@@ -209,6 +229,10 @@ int main() {
     //i like to shmove it shmove it
     shmove(&box, &direction, keyPressed);
     moveBody(box, body, bodyLength);
+
+    if(getColliding(box, apple)) {
+      addBodySegment(&body, &bodyLength);
+    }
 
     drawAll(&box, body, bodyLength, &apple);
 
