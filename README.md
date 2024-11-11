@@ -1,5 +1,5 @@
 # snake
 snake written in c
-one thing though, its not complete.
-currently i'm just missing the apple moving to a random spot, should finish that in a minute or two.
-thats all and i'm working on it
+make sure to compile it with compile.sh, for it was compiled for an armv8 device
+then just execute snake
+exit is 'Q'

@@ -213,6 +213,8 @@ int main() {
 
   int maxLength = (maxX - 1) * (maxY - 1);
 
+  bool won = false;
+
   nodelay(stdscr, true);
 
   curs_set(0); //hide the cursor
@@ -242,15 +244,20 @@ int main() {
     shmove(&box, &direction, keyPressed);
     moveBody(box, body, bodyLength);
 
-    bool collidingApple = getColliding(box, apple);
-    if(collidingApple) {
+    if(getColliding(box, apple)) {
       addBodySegment(&body, &bodyLength);
-      if(bodyLength > maxLength)
-        goto win;
+    setRandApple:
+      setPosRandom(&apple);
+      if(getCollidingBody(apple, body, bodyLength) || getColliding(box, apple))
+        goto setRandApple;
+      if(bodyLength > maxLength) {
+        won = true;
+        goto end;
+      }
     }
 
-    if(getCollidingBody(box, body, bodyLength) && !collidingApple)
-      goto lose;
+    if(getCollidingBody(box, body, bodyLength))
+      goto end;
 
     drawAll(&box, body, bodyLength, &apple);
 
@@ -258,17 +265,14 @@ int main() {
     delay(tickTime);   //delay .1 seconds
     clear();
   }
-
-win:
-  endwin();
-  printf("You won! congrats! your length was %d\n", bodyLength);
-  goto end;
-lose:
-  endwin();
-  printf("You lost, your length was %d\n", bodyLength);
 end:
   //ENDPROGRAM
+  endwin();
   free(body);
+  if(won)
+    printf("You won! congrats! your length was %d\n", bodyLength);
+  else
+    printf("You lost, your length was %d\n", bodyLength);
   //and you too, people snooping around here
   //you people make the world turn
   //wether it be just your own, or others
