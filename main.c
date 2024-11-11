@@ -182,8 +182,8 @@ void addBodySegment(struct positionData** body, int* bodyLength) {
     newBody[i].x = (*body)[i].x;
     newBody[i].y = (*body)[i].y;
   }
-  newBody[*bodyLength].x = (*body)[*bodyLength - 1].x;
-  newBody[*bodyLength].y = (*body)[*bodyLength - 1].y;
+  newBody[*bodyLength].x = 0;
+  newBody[*bodyLength].y = 0;
   free(*body);
   *body = newBody;
   (*bodyLength)++;
@@ -195,11 +195,23 @@ bool getColliding(struct positionData a, struct positionData b) {
   return a.x == 0 && a.y == 0;
 }
 
+bool getCollidingBody(struct positionData head, struct positionData* body, int bodyLength) {
+  bodyLength += -1;
+  while(bodyLength > 0) {
+    if(getColliding(head, *(body + bodyLength)))
+      return true;
+    bodyLength += -1;
+  }
+  return false;
+}
+
 int main() {
   initscr(); //Initiate screen
 
   int maxX, maxY; //cool things for max x and y (declar)
   getmaxyx(stdscr, maxX, maxY); //set ^
+
+  int maxLength = (maxX - 1) * (maxY - 1);
 
   nodelay(stdscr, true);
 
@@ -208,7 +220,7 @@ int main() {
   struct positionData box;      //our box friend
   setPositionData(&box, maxX/2, maxY/2); //set it to middle of screen
 
-  int bodyLength = 10;
+  int bodyLength = 1;
   struct positionData* body;
   body = (struct positionData*)malloc(sizeof(struct positionData) * bodyLength); //allocate our body
   initBody(body, bodyLength);
@@ -230,9 +242,15 @@ int main() {
     shmove(&box, &direction, keyPressed);
     moveBody(box, body, bodyLength);
 
-    if(getColliding(box, apple)) {
+    bool collidingApple = getColliding(box, apple);
+    if(collidingApple) {
       addBodySegment(&body, &bodyLength);
+      if(bodyLength > maxLength)
+        goto win;
     }
+
+    if(getCollidingBody(box, body, bodyLength) && !collidingApple)
+      goto lose;
 
     drawAll(&box, body, bodyLength, &apple);
 
@@ -241,12 +259,16 @@ int main() {
     clear();
   }
 
+win:
+  endwin();
+  printf("You won! congrats! your length was %d\n", bodyLength);
+  goto end;
+lose:
+  endwin();
+  printf("You lost, your length was %d\n", bodyLength);
 end:
   //ENDPROGRAM
-  endwin();
   free(body);
-  //printf("thank you for your time, i hope you enjoy\nhave a great day\n");
-  //printf("and more importantly i hope you have a great life\n");
   //and you too, people snooping around here
   //you people make the world turn
   //wether it be just your own, or others
