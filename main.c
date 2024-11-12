@@ -274,8 +274,8 @@ end:
   else
     printf("You lost, your length was %d\n", bodyLength);
   //and you too, people snooping around here
-  //you people make the world turn
-  //wether it be just your own, or others
+  //i doubt anyone is gonna see this but if you do
+  //just know
   //you are increadible.
   //and thank you for your time of day
   //and more importantly thank yourself for giving yourself so many skills
