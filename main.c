@@ -71,7 +71,7 @@ void wrapPosition(struct positionData* position) {
   int maxX, maxY; //cool things for max x and y (declar)
   getmaxyx(stdscr, maxX, maxY); //set ^
 
-  if((*position).x < maxX && isPos((*position).x) &&
+  if(position->x < maxX && isPos(position->x) &&
   (*position).y < maxY && isPos((*position).y)) {
     return;
   }
@@ -80,8 +80,7 @@ void wrapPosition(struct positionData* position) {
 
   if(retX < maxX && isPos(retX) && retY < maxY && isPos(retY))
     return; //this is where it is nice and good and so we don't touch it
-
-//imagine a label here called checkX
+  //imagine a label here called checkX
   if(retX >= maxX && isPos(retX)) {
     retX = retX % maxX;
     goto checkY;
@@ -117,10 +116,7 @@ void shmove(struct positionData* character, struct positionData* direction, int 
 }
 
 void setBodyParts(struct positionData front, struct positionData* body, int bodyLength) {
-  for(int i = bodyLength; i > 0; i = i - 1) {
-    body[i] = body[i - 1];
-  }
-  body[0] = front;
+  body[bodyLength - 1] = front;
   return;
 }
 
