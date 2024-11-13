@@ -115,11 +115,6 @@ void shmove(struct positionData* character, struct positionData* direction, int 
   wrapPosition(character); //wrap the player around the limits
 }
 
-void setBodyParts(struct positionData front, struct positionData* body, int bodyLength) {
-  body[bodyLength - 1] = front;
-  return;
-}
-
 void setPosRandom(struct positionData* data) {
   // i doubt this needs explaining but basically we just set the two to random numbers
   srand(time(NULL));
