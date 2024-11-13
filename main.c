@@ -168,14 +168,9 @@ void drawAll(struct positionData* head, struct positionData* body, int bodyLengt
 
 void addBodySegment(struct positionData** body, int* bodyLength) {
   struct positionData* newBody;
-  newBody = (struct positionData*)malloc(sizeof(struct positionData) * (*bodyLength + 1));
-  for(int i = 0; i < *bodyLength; i++) {
-    newBody[i].x = (*body)[i].x;
-    newBody[i].y = (*body)[i].y;
-  }
+  newBody = (struct positionData*)realloc(*body, sizeof(struct positionData) * (*bodyLength + 1));
   newBody[*bodyLength].x = 0;
   newBody[*bodyLength].y = 0;
-  free(*body);
   *body = newBody;
   (*bodyLength)++;
   return;
