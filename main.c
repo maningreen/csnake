@@ -119,7 +119,6 @@ void setPosRandom(struct positionData* data) {
   // i doubt this needs explaining but basically we just set the two to random numbers
   srand(time(NULL));
   data->x = rand();
-  srand(time(NULL));
   data->y = rand();
   wrapPosition(data);
   return;
