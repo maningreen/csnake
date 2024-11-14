@@ -21,14 +21,14 @@ struct positionData {
 };
 
 void movePositionData(struct positionData* in, int x, int y) {
-  (*in).x += x;
-  (*in).y += y;
+  in->x += x;
+  in->y += y;
   return;
 }
 
 void setPositionData(struct positionData* in,int x,int y) {
-  (*in).x = x;
-  (*in).y = y;
+  in->x = x;
+  in->y = y;
   return;
 }
 
@@ -72,11 +72,11 @@ void wrapPosition(struct positionData* position) {
   getmaxyx(stdscr, maxX, maxY); //set ^
 
   if(position->x < maxX && isPos(position->x) &&
-  position->y < maxY && isPos((*position).y)) {
+  position->y < maxY && isPos(position->y)) {
     return;
   }
-  int retX = (*position).x; //i learned you could use position->x after all of this.
-  int retY = (*position).y; //i am too lazy to rewrite that
+  int retX = position->x; //i learned you could use position->x after all of this.
+  int retY = position->y; //i am too lazy to rewrite that
 
   if(retX < maxX && isPos(retX) && retY < maxY && isPos(retY))
     return; //this is where it is nice and good and so we don't touch it
