@@ -149,12 +149,10 @@ void moveBody(struct positionData start, struct positionData* bodyArray,
               int bodyLength) {
   bodyLength += -1;
   while(bodyLength > 0) {
-    (bodyArray + bodyLength)->x = (bodyArray + bodyLength - 1)->x;
-    (bodyArray + bodyLength)->y = (bodyArray + bodyLength - 1)->y;
+    *(bodyArray + bodyLength) = *(bodyArray + bodyLength - 1);
     bodyLength += -1;
   }
-  bodyArray->x = start.x;
-  bodyArray->y = start.y;
+  *bodyArray = start;
   return;
 }
 
