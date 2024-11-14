@@ -72,7 +72,7 @@ void wrapPosition(struct positionData* position) {
   getmaxyx(stdscr, maxX, maxY); //set ^
 
   if(position->x < maxX && isPos(position->x) &&
-  (*position).y < maxY && isPos((*position).y)) {
+  position->y < maxY && isPos((*position).y)) {
     return;
   }
   int retX = (*position).x; //i learned you could use position->x after all of this.
@@ -97,8 +97,8 @@ checkY:
   if(retY <= maxY && !isPos(retY))
     retY = maxY - abs(retY);
 end:
-  (*position).x = retX;
-  (*position).y = retY;
+  position->x = retX;
+  position->y = retY;
   return;
 }
 
