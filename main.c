@@ -64,7 +64,7 @@ struct positionData getDirFromKeyCode(int keyPressed) {
 }
 
 bool isPos(int number) {
-  return number == abs(number);
+  return number >= 0;
 }
 
 void wrapPosition(struct positionData* position) {
@@ -72,14 +72,11 @@ void wrapPosition(struct positionData* position) {
   getmaxyx(stdscr, maxX, maxY); //set ^
 
   if(position->x < maxX && isPos(position->x) &&
-  position->y < maxY && isPos(position->y)) {
-    return;
-  }
+  position->y < maxY && isPos(position->y))
+    return; //this is where it is nice and good and so we don't touch it
   int retX = position->x; //i learned you could use position->x after all of this.
   int retY = position->y; //i am too lazy to rewrite that
 
-  if(retX < maxX && isPos(retX) && retY < maxY && isPos(retY))
-    return; //this is where it is nice and good and so we don't touch it
   //imagine a label here called checkX
   if(retX >= maxX && isPos(retX)) {
     retX = retX % maxX;
@@ -125,8 +122,8 @@ void setPosRandom(struct positionData* data, int maxX, int maxY) {
 
 void adjustRandomPos(struct positionData* data) {
   //this is intended to be a quick adjustment for if its coliding the body
-  data->x = -data->x;
-  data->y = -(data->y);
+  data->x = -data->x + 1; //add number for a touch of randomness
+  data->y = -data->y + 1;
   wrapPosition(data);
 }
 
@@ -172,8 +169,7 @@ void drawAll(struct positionData* head, struct positionData* body, int bodyLengt
 void addBodySegment(struct positionData** body, int* bodyLength) {
   struct positionData* newBody;
   newBody = (struct positionData*)realloc(*body, sizeof(struct positionData) * (*bodyLength + 1));
-  newBody[*bodyLength].x = 0;
-  newBody[*bodyLength].y = 0;
+  newBody[*bodyLength] = newBody[*bodyLength - 1];
   *body = newBody;
   (*bodyLength)++;
   return;
@@ -186,7 +182,7 @@ bool getColliding(struct positionData a, struct positionData b) {
 
 bool getCollidingBody(struct positionData head, struct positionData* body, int bodyLength) {
   bodyLength += -1;
-  while(bodyLength > 0) {
+  while(bodyLength > 4) {
     if(getColliding(head, body[bodyLength]))
       return true;
     bodyLength += -1;
@@ -226,7 +222,7 @@ int main() {
   while(true) {
 
     int keyPressed = getKeyPress();
-    if(keyPressed == 'Q') //if its q we quit
+    if(keyPressed == 'Q' || keyPressed == 'q') //if its q we quit
       goto end;   //pardon the use of gotos my time in assembly forced my hand
 
     //i like to shmove it shmove it
