@@ -115,12 +115,11 @@ void shmove(struct positionData* character, struct positionData* direction, int 
   wrapPosition(character); //wrap the player around the limits
 }
 
-void setPosRandom(struct positionData* data) {
+void setPosRandom(struct positionData* data, int maxX, int maxY) {
   // i doubt this needs explaining but basically we just set the two to random numbers
   srand(time(NULL));
-  data->x = rand();
-  data->y = rand();
-  wrapPosition(data);
+  data->x = rand() % maxX;
+  data->y = rand() % maxY;
   return;
 }
 
@@ -214,7 +213,7 @@ int main() {
   setPositionData(&direction, 0, -1);
 
   struct positionData apple;
-  setPosRandom(&apple); //it took me 7 tries to get the & not proud of that
+  setPosRandom(&apple, maxX, maxY); //it took me 7 tries to get the & not proud of that
 
   //main loop
   while(true) {
@@ -230,7 +229,7 @@ int main() {
     if(getColliding(box, apple)) {
       addBodySegment(&body, &bodyLength);
     setRandApple:
-      setPosRandom(&apple);
+      setPosRandom(&apple, maxX, maxY);
       if(getCollidingBody(apple, body, bodyLength) || getColliding(box, apple))
         goto setRandApple;
       if(bodyLength > maxLength) {
