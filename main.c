@@ -123,6 +123,13 @@ void setPosRandom(struct positionData* data, int maxX, int maxY) {
   return;
 }
 
+void adjustRandomPos(struct positionData* data) {
+  //this is intended to be a quick adjustment for if its coliding the body
+  data->x = -data->x;
+  data->y = -(data->y);
+  wrapPosition(data);
+}
+
 void initBody(struct positionData* bodyArray, int size) {
   size += -1;
   int maxX, maxY; //cool things for max x and y (declar)
@@ -180,7 +187,7 @@ bool getColliding(struct positionData a, struct positionData b) {
 bool getCollidingBody(struct positionData head, struct positionData* body, int bodyLength) {
   bodyLength += -1;
   while(bodyLength > 0) {
-    if(getColliding(head, *(body + bodyLength)))
+    if(getColliding(head, body[bodyLength]))
       return true;
     bodyLength += -1;
   }
@@ -230,16 +237,19 @@ int main() {
       addBodySegment(&body, &bodyLength);
     setRandApple:
       setPosRandom(&apple, maxX, maxY);
-      if(getCollidingBody(apple, body, bodyLength) || getColliding(box, apple))
-        goto setRandApple;
       if(bodyLength > maxLength) {
         won = true;
         goto end;
       }
+    checkApple:
+      if(getCollidingBody(apple, body, bodyLength) || getColliding(box, apple)) {
+        adjustRandomPos(&apple);
+        goto checkApple;
+      }
     }
 
     if(getCollidingBody(box, body, bodyLength))
-      goto end;
+      goto animation;
 
     drawAll(&box, body, bodyLength, &apple);
 
@@ -247,6 +257,18 @@ int main() {
     delay(tickTime);   //delay .1 seconds
     clear();
   }
+animation:  
+  //cool animation
+  int buffer = bodyLength;
+  while(bodyLength > 1) {
+    bodyLength--;
+    clear();
+    drawBody(body, bodyLength);
+    drawPositionData(&box, headChar);
+    refresh();
+    delay(bodyLength/buffer);
+  }
+  bodyLength = buffer;
 end:
   //ENDPROGRAM
   endwin();
