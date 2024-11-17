@@ -200,6 +200,8 @@ int main() {
 
   bool won = false;
 
+  noecho();;
+
   nodelay(stdscr, true);
 
   curs_set(0); //hide the cursor
