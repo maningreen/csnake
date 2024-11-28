@@ -64,7 +64,9 @@ struct positionData getDirFromKeyCode(int keyPressed) {
   return dir;
 }
 
-bool isPos(int number) { return number >= 0; }
+bool isPos(int number) {
+  return number >= 0;
+}
 
 void wrapPosition(struct positionData *position) {
   int maxX, maxY;               // cool things for max x and y (declar)
@@ -255,7 +257,7 @@ int main() {
     }
 
     if (getCollidingBody(box, body, bodyLength))
-      goto animation;
+      goto end;
 
     drawAll(&box, body, bodyLength, &apple);
 
