@@ -207,7 +207,6 @@ int main() {
   bool won = false;
 
   noecho();
-  ;
 
   nodelay(stdscr, true);
 
@@ -244,7 +243,7 @@ int main() {
       addBodySegment(&body, &bodyLength);
     setRandApple:
       setPosRandom(&apple, maxX, maxY);
-      if (bodyLength > maxLength) {
+      if (bodyLength >= maxLength) {
         won = true;
         goto end;
       }
