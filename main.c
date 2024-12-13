@@ -262,7 +262,7 @@ int main() {
 
     refresh();       // update screen
     delay(tickTime); // delay .1 seconds
-    clear();
+    erase();
   }
 end:
   // ENDPROGRAM
