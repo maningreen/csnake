@@ -10,8 +10,8 @@ It will come out later. I am not that smart.
 
 # REQUIREMENTS
 
-you need gcc installed, ncurses installed, and to be on a linux machine
+you need: unix based, make, gcc, and ncurses installed
 
-then run compile.sh to compile it.
+how to compile: be in the projects directory, run make and it'll make
 
 then you can execute snake in that directory
