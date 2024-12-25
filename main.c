@@ -3,6 +3,9 @@
 #include <time.h>
 #include <unistd.h>
 
+//please know that the majority of these were written in order of top to bottom
+//with some obvious exceptions being main and #defines
+
 // define constants
 #define tickTime .1 // remove this when we get scaly thingy
 // by scaly thing i mean decrease with time
@@ -40,7 +43,7 @@ struct positionData addPositionData(struct positionData a,
 
 void drawPositionData(struct positionData *in, char *characters) {
   wmove(stdscr, in->x, in->y);
-  printw(characters);
+  printw("%s", characters);
 }
 
 int getKeyPress() {
@@ -75,8 +78,7 @@ void wrapPosition(struct positionData *position) {
   if (position->x < maxX && isPos(position->x) && position->y < maxY &&
       isPos(position->y))
     return; // this is where it is nice and good and so we don't touch it
-  int retX =
-      position->x; // i learned you could use position->x after all of this.
+  int retX = position->x; // i learned you could use position->x after all of this.
   int retY = position->y; // i am too lazy to rewrite that
 
   // imagine a label here called checkX
@@ -140,7 +142,6 @@ void initBody(struct positionData *bodyArray, int size) {
     bodyArray[size].y = maxY / 2;
     size += -1;
   }
-  return;
 }
 
 void drawBody(struct positionData *bodyArray, int size) {
@@ -149,7 +150,6 @@ void drawBody(struct positionData *bodyArray, int size) {
     drawPositionData(bodyArray + size, bodyChar);
     size += -1;
   }
-  return;
 }
 
 void moveBody(struct positionData start, struct positionData *bodyArray,
@@ -160,7 +160,6 @@ void moveBody(struct positionData start, struct positionData *bodyArray,
     bodyLength += -1;
   }
   *bodyArray = start;
-  return;
 }
 
 void drawAll(struct positionData *head, struct positionData *body,
@@ -177,7 +176,6 @@ void addBodySegment(struct positionData **body, int *bodyLength) {
   newBody[*bodyLength] = newBody[*bodyLength - 1];
   *bodyLength = *bodyLength + 1;
   *body = newBody;
-  return;
 }
 
 bool getColliding(struct positionData a, struct positionData b) {
@@ -258,11 +256,10 @@ int main() {
     if (getCollidingBody(box, body, bodyLength))
       goto end;
 
+    erase();
     drawAll(&box, body, bodyLength, &apple);
-
     refresh();       // update screen
     delay(tickTime); // delay .1 seconds
-    erase();
   }
 end:
   // ENDPROGRAM
